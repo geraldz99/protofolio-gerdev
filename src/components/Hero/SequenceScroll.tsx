@@ -82,34 +82,61 @@ export default function SequenceScroll() {
           </h1>
         </div>
 
-        {/* Roles Bullet Pills List */}
+        {/* Roles Bullet Pills List
         <div className="hero-fade flex flex-wrap items-center justify-center gap-3 pt-2">
           <span className="px-4 py-1.5 rounded-full border border-[#2b211b]/20 bg-[#ebd0b5]/70 text-xs font-mono font-bold text-[#c85628] tracking-wider uppercase shadow-sm">
-            Back-End Developer
+            Backend Developer
           </span>
           <span className="px-4 py-1.5 rounded-full border border-[#2b211b]/20 bg-[#ebd0b5]/70 text-xs font-mono font-bold text-[#2b211b] tracking-wider uppercase shadow-sm">
-            Full-Stack Developer
+            Fullstack Developer
           </span>
           <span className="px-4 py-1.5 rounded-full border border-[#2b211b]/20 bg-[#ebd0b5]/70 text-xs font-mono font-bold text-[#2b211b] tracking-wider uppercase shadow-sm">
             Software Engineer
           </span>
-        </div>
+        </div> */}
 
         {/* Hero Image Showcase Box */}
         <div
           ref={heroImageRef}
-          className="relative w-full max-w-lg aspect-[4/3] md:aspect-[16/10] mt-4 rounded-3xl border border-[#2b211b]/20 bg-[#ebd0b5]/60 p-4 md:p-6 shadow-2xl backdrop-blur-md overflow-hidden group"
+          className="relative w-full max-w-xl md:max-w-2xl aspect-[4/3] md:aspect-[16/10] my-2 flex items-center justify-center group"
         >
-          <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#f6d4b1]">
-            <Image
-              src={hero.heroImage || "/projects/ger2.png"}
-              alt="Geraldine Firdaus Hero Showcase"
-              fill
-              className="object-contain filter drop-shadow-[0_10px_30px_rgba(43,33,27,0.15)] group-hover:scale-105 transition-transform duration-700"
-              priority
-              unoptimized
-            />
+          {/* Ambient Warm Halo Lighting */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-[#c85628]/15 rounded-full blur-3xl pointer-events-none -z-10" />
+
+          {/* Soft Grounding Floor Shadow */}
+          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-56 sm:w-72 md:w-80 h-5 bg-[#2b211b]/20 rounded-[100%] blur-md pointer-events-none -z-10" />
+
+          {/* Floating Glassmorphism Badge 1 - Left Top */}
+          <div className="absolute top-6 left-0 sm:left-2 md:left-4 px-3.5 py-1.5 rounded-full bg-[#ebd0b5]/90 border border-[#2b211b]/15 shadow-lg backdrop-blur-md hidden sm:flex items-center gap-2 text-[11px] font-mono font-bold text-[#2b211b] transition-transform duration-500 group-hover:-translate-y-1 z-10">
+            <span className="w-2 h-2 rounded-full bg-[#c85628] animate-pulse" />
+            <span>Backend Developer</span>
           </div>
+
+          {/* Floating Glassmorphism Badge 2 - Right Top */}
+          <div className="absolute top-12 right-0 sm:right-2 md:right-4 px-3.5 py-1.5 rounded-full bg-[#ebd0b5]/90 border border-[#2b211b]/15 shadow-lg backdrop-blur-md hidden sm:flex items-center gap-2 text-[11px] font-mono font-bold text-[#2b211b] transition-transform duration-500 group-hover:translate-y-1 z-10">
+            <span className="text-[#c85628]">⚡</span>
+            <span>Fullstack Developer</span>
+          </div>
+
+          {/* Floating Glassmorphism Badge 3 - Left Bottom */}
+          <div className="absolute bottom-10 left-2 sm:left-6 md:left-8 px-3.5 py-1.5 rounded-full bg-[#ebd0b5]/90 border border-[#2b211b]/15 shadow-lg backdrop-blur-md hidden sm:flex items-center gap-2 text-[11px] font-mono font-bold text-[#2b211b] transition-transform duration-500 group-hover:-translate-y-1 z-10">
+            <span className="text-[#c85628]">💻</span>
+            <span>Software Engineer</span>
+          </div>
+
+          {/* Person Avatar with Smooth Bottom Fade Mask */}
+          <Image
+            src={hero.heroImage || "/projects/ger2.png"}
+            alt="Geraldine Firdaus Hero Showcase"
+            fill
+            className="object-contain filter drop-shadow-[0_15px_30px_rgba(43,33,27,0.15)] group-hover:scale-[1.03] transition-transform duration-700"
+            style={{
+              maskImage: "linear-gradient(to bottom, black 82%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, black 82%, transparent 100%)",
+            }}
+            priority
+            unoptimized
+          />
         </div>
 
         {/* CTA Button (ctaText & ctaLink from Admin) */}

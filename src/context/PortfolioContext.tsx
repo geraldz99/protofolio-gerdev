@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { PROJECTS as INITIAL_PROJECTS, Project } from "@/data/projects";
+import { supabase } from "@/lib/supabase";
 
 export interface HeroData {
   bgText: string;
@@ -196,13 +197,13 @@ export interface PortfolioState {
 
 const DEFAULT_PORTFOLIO_STATE: PortfolioState = {
   hero: {
-    bgText: "DEVELOPER",
+    bgText: "FULLSTACK",
     prefixText: "Hi there, I’m",
     highlightText: "Geraldine",
     heroImage: "/projects/ger2.png",
     ctaText: "Hire Me",
     ctaLink: "/#contact",
-    bottomLeftText: "Specialized in Back-End architecture, RESTful API design, microservices, and database optimization.",
+    bottomLeftText: "Specialized in Back-End architecture, RESTful API design,   and database optimization.",
     bottomRightText: "I build fast, scalable, and resilient back-end systems using PHP, Node.js, Golang, and PostgreSQL.",
   },
   about: {
@@ -398,6 +399,7 @@ interface PortfolioContextType {
   state: PortfolioState;
   updateSection: <K extends keyof PortfolioState>(key: K, data: PortfolioState[K]) => void;
   resetAll: () => void;
+  isLoading: boolean;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
@@ -409,27 +411,68 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setState((prev) => ({ ...prev, ...parsed }));
+    async function loadPortfolioData() {
+      // 1. Try loading from Supabase first if configured
+      if (supabase) {
+        try {
+          const { data, error } = await supabase
+            .from("portfolio")
+            .select("data")
+            .eq("key", "main")
+            .maybeSingle();
+
+          if (!error && data && data.data) {
+            setState((prev) => ({ ...prev, ...data.data }));
+            try {
+              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data.data));
+            } catch {}
+            setInitialized(true);
+            return;
+          }
+        } catch {
+          // Fallback to local storage if network or error
+        }
       }
-    } catch {
-      // Fallback ke default state jika terjadi kesalahan parsing
-    } finally {
-      setInitialized(true);
+
+      // 2. Fallback to LocalStorage if Supabase fails or not configured
+      try {
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          setState((prev) => ({ ...prev, ...parsed }));
+        }
+      } catch {
+        // Fallback to DEFAULT_PORTFOLIO_STATE
+      } finally {
+        setInitialized(true);
+      }
     }
+
+    loadPortfolioData();
   }, []);
 
   const updateSection = <K extends keyof PortfolioState>(key: K, data: PortfolioState[K]) => {
     setState((prev) => {
       const updated = { ...prev, [key]: data };
+
       try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
       } catch {
         // Handle quota storage
       }
+
+      // Sync to Supabase in background
+      if (supabase) {
+        supabase
+          .from("portfolio")
+          .upsert({ key: "main", data: updated }, { onConflict: "key" })
+          .then(({ error }) => {
+            if (error) {
+              console.error("Supabase sync error:", error.message);
+            }
+          });
+      }
+
       return updated;
     });
   };
@@ -441,18 +484,21 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // Handle quota storage
     }
+
+    if (supabase) {
+      supabase
+        .from("portfolio")
+        .upsert({ key: "main", data: DEFAULT_PORTFOLIO_STATE }, { onConflict: "key" })
+        .then(({ error }) => {
+          if (error) {
+            console.error("Supabase reset error:", error.message);
+          }
+        });
+    }
   };
 
-  if (!initialized) {
-    return (
-      <PortfolioContext.Provider value={{ state, updateSection, resetAll }}>
-        {children}
-      </PortfolioContext.Provider>
-    );
-  }
-
   return (
-    <PortfolioContext.Provider value={{ state, updateSection, resetAll }}>
+    <PortfolioContext.Provider value={{ state, updateSection, resetAll, isLoading: !initialized }}>
       {children}
     </PortfolioContext.Provider>
   );

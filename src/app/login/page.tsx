@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -23,12 +24,28 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Logic autentikasi
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      // Berhasil - dapatkan akses ke admin
-      window.location.href = "/admin";
+      if (!supabase) {
+        setError(
+          "Supabase belum dikonfigurasi. Silakan isi NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY di berkas .env.local terlebih dahulu."
+        );
+        return;
+      }
+
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        setError(authError.message || "Email atau password tidak sesuai.");
+        return;
+      }
+
+      if (data.session) {
+        window.location.href = "/admin";
+      }
     } catch {
-      setError("Email atau password tidak sesuai.");
+      setError("Terjadi kesalahan saat mencoba masuk.");
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import {
   LayoutDashboard,
   Sparkles,
@@ -60,6 +62,25 @@ type SectionTab =
 
 export default function AdminDashboardPage() {
   const { state, updateSection } = usePortfolio();
+  const router = useRouter();
+
+  useEffect(() => {
+    async function checkAuth() {
+      if (!supabase) return;
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        router.push("/login");
+      }
+    }
+    checkAuth();
+  }, [router]);
+
+  const handleLogout = async () => {
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+    router.push("/login");
+  };
 
   const [activeTab, setActiveTab] = useState<SectionTab>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -82,6 +103,7 @@ export default function AdminDashboardPage() {
 
   // Keep local editor state in sync when context initializes or changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHeroData(state.hero);
     setAboutData(state.about);
     setExperienceData(state.experience);
@@ -207,13 +229,13 @@ export default function AdminDashboardPage() {
             <span>Lihat Website</span>
             <ExternalLink size={14} />
           </Link>
-          <Link
-            href="/login"
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-mono text-red-600 hover:bg-red-500/10 rounded-xl font-bold transition-colors"
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-mono text-red-600 hover:bg-red-500/10 rounded-xl font-bold transition-colors cursor-pointer"
           >
             <LogOut size={14} />
             <span>Keluar</span>
-          </Link>
+          </button>
         </div>
       </aside>
 
