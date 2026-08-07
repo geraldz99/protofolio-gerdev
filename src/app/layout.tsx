@@ -91,25 +91,48 @@ export const metadata: Metadata = {
   category: "Technology",
 };
 
+import { ThemeProvider } from "@/context/ThemeContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var isDark = saved ? saved === 'dark' : true;
+                  if (isDark) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
-        className={`${poppins.variable} ${playfair.variable} ${poppins.className} antialiased bg-[#f6d4b1] text-[#2b211b] relative selection:bg-[#2b211b] selection:text-[#f6d4b1]`}
+        className={`${poppins.variable} ${playfair.variable} ${poppins.className} antialiased bg-[var(--bg-main)] text-[var(--text-main)] relative selection:bg-[var(--accent)] selection:text-white transition-colors duration-300`}
       >
         <div className="ambient-blob-1" />
         <div className="ambient-blob-2" />
         <div className="ambient-blob-3" />
-        <PortfolioProvider>
-          <LenisProvider>
-            {/* <Preloader /> */}
-            <NavigationWrapper>{children}</NavigationWrapper>
-          </LenisProvider>
-        </PortfolioProvider>
+        <ThemeProvider>
+          <PortfolioProvider>
+            <LenisProvider>
+              {/* <Preloader /> */}
+              <NavigationWrapper>{children}</NavigationWrapper>
+            </LenisProvider>
+          </PortfolioProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

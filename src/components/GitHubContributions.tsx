@@ -6,10 +6,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
 import { usePortfolio } from "@/context/PortfolioContext";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function GitHubContributions() {
   const { state } = usePortfolio();
   const { github } = state;
+  const { theme: currentTheme } = useTheme();
   const containerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -39,40 +41,40 @@ export default function GitHubContributions() {
     return () => ctx.revert();
   }, []);
 
-  const theme = {
+  const calendarTheme = {
     light: ["#ebd0b5", "#e0b38c", "#c88555", "#c85628", "#2b211b"],
-    dark: ["#ebd0b5", "#e0b38c", "#c88555", "#c85628", "#2b211b"],
+    dark: ["#2a221c", "#6b3c22", "#ad5228", "#e06d3b", "#f6d4b1"],
   };
 
   return (
     <section
       id="github"
       ref={containerRef}
-      className="py-16 md:py-24 px-6 max-w-4xl mx-auto text-[#2b211b]"
+      className="py-16 md:py-24 px-6 max-w-4xl mx-auto text-[var(--text-main)]"
     >
-      <hr className="border-[#2b211b]/20 mb-8" />
+      <hr className="border-[var(--border-subtle)] mb-8" />
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[#2b211b]">
+        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[var(--text-main)]">
           {github.titleMain || "Aktivitas &"}{" "}
-          <span className="text-[#c85628]">{github.titleHighlight || "Kontribusi GitHub"}</span>
+          <span className="text-[var(--accent)]">{github.titleHighlight || "Kontribusi GitHub"}</span>
         </h1>
         <a
           href={github.profileUrl || "https://github.com/geraldz99"}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1 text-xs font-mono font-bold tracking-widest text-[#c85628] hover:underline uppercase self-start md:self-auto"
+          className="inline-flex items-center gap-1 text-xs font-mono font-bold tracking-widest text-[var(--accent)] hover:underline uppercase self-start md:self-auto"
         >
           <span>@{github.username || "geraldz99"}</span>
           <ArrowUpRight className="w-4 h-4" />
         </a>
       </div>
 
-      <div className="github-block p-6 rounded-3xl bg-[#ebd0b5]/80 border border-[#2b211b]/20 shadow-sm overflow-x-auto flex justify-center">
+      <div className="github-block p-6 rounded-3xl bg-[var(--bg-card)]/80 border border-[var(--border-subtle)] shadow-sm overflow-x-auto flex justify-center transition-colors duration-300">
         <GitHubCalendar
           username={github.username || "geraldz99"}
-          colorScheme="light"
-          theme={theme}
+          colorScheme={currentTheme}
+          theme={calendarTheme}
           fontSize={12}
           blockSize={11}
           blockMargin={4}

@@ -44,17 +44,17 @@ export default function Testimonials() {
     <section
       id="testimonials"
       ref={containerRef}
-      className="py-16 md:py-24 px-6 max-w-5xl mx-auto text-[#2b211b]"
+      className="py-16 md:py-24 px-6 max-w-5xl mx-auto text-[var(--text-main)]"
     >
-      <hr className="border-[#2b211b]/20 mb-8" />
+      <hr className="border-[var(--border-subtle)] mb-8" />
 
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[#2b211b]">
+        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[var(--text-main)]">
           {testimonials.titleMain || "Kritik &"}{" "}
-          <span className="text-[#c85628]">{testimonials.titleHighlight || "Apresiasi"}</span>
+          <span className="text-[var(--accent)]">{testimonials.titleHighlight || "Apresiasi"}</span>
         </h1>
-        <span className="px-3.5 py-1 rounded-full border border-[#2b211b]/20 bg-[#ebd0b5]/80 font-mono text-xs font-bold text-[#c85628] uppercase tracking-wider self-start md:self-auto">
+        <span className="px-3.5 py-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)]/80 font-mono text-xs font-bold text-[var(--accent)] uppercase tracking-wider self-start md:self-auto">
           {testimonials.sectionBadge || "09 // TESTIMONI"}
         </span>
       </div>
@@ -64,17 +64,17 @@ export default function Testimonials() {
         {testimonialItems.map((item) => (
           <div
             key={item.id}
-            className="testimonial-block p-6 rounded-3xl bg-[#ebd0b5]/80 border border-[#2b211b]/20 hover:border-[#c85628] transition-all flex flex-col justify-between space-y-4 shadow-sm group"
+            className="testimonial-block p-6 rounded-3xl bg-[var(--bg-card)]/80 border border-[var(--border-subtle)] hover:border-[var(--accent)] transition-all flex flex-col justify-between space-y-4 shadow-sm group"
           >
-            <p className="text-xs md:text-sm text-[#2b211b]/85 leading-relaxed font-medium italic">
+            <p className="text-xs md:text-sm text-[var(--text-muted)] leading-relaxed font-medium italic">
               &quot;{item.content}&quot;
             </p>
 
-            <div className="pt-3 border-t border-[#2b211b]/15 space-y-0.5">
-              <h4 className="text-sm font-bold font-serif text-[#2b211b] group-hover:text-[#c85628] transition-colors">
+            <div className="pt-3 border-t border-[var(--border-subtle)] space-y-0.5">
+              <h4 className="text-sm font-bold font-serif text-[var(--text-main)] group-hover:text-[var(--accent)] transition-colors">
                 {item.author}
               </h4>
-              <p className="text-[11px] font-mono text-[#c85628] font-bold">
+              <p className="text-[11px] font-mono text-[var(--accent)] font-bold">
                 {item.role} {item.company ? `@ ${item.company}` : ""}
               </p>
             </div>

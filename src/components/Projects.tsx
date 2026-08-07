@@ -15,21 +15,21 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <div className="edh-project-block h-full flex flex-col">
       {/* Retro Card Container */}
-      <div className="p-5 md:p-6 rounded-3xl border border-[#2b211b]/20 bg-[#ebd0b5]/60 hover:bg-[#ebd0b5]/90 hover:border-[#c85628]/40 transition-all duration-300 shadow-sm flex flex-col justify-between h-full space-y-4 group">
+      <div className="p-5 md:p-6 rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/60 hover:bg-[var(--bg-card)]/90 hover:border-[var(--accent)]/40 transition-all duration-300 shadow-sm flex flex-col justify-between h-full space-y-4 group">
         <div className="space-y-4">
           {/* Retro Browser Window Mockup Frame */}
-          <div className="rounded-2xl border border-[#2b211b]/25 bg-[#f6d4b1] overflow-hidden shadow-sm">
+          <div className="rounded-2xl border border-[var(--border-strong)] bg-[var(--bg-main)] overflow-hidden shadow-sm">
             {/* Top Window Bar */}
-            <div className="px-3.5 py-2 bg-[#ebd0b5] border-b border-[#2b211b]/20 flex items-center justify-between">
+            <div className="px-3.5 py-2 bg-[var(--bg-card)] border-b border-[var(--border-subtle)] flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#c85628]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[var(--accent)]" />
                 <div className="w-2.5 h-2.5 rounded-full bg-amber-600/80" />
                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-700/80" />
               </div>
-              <span className="font-mono text-[10px] font-bold text-[#2b211b]/60 truncate max-w-[130px] sm:max-w-[170px]">
+              <span className="font-mono text-[10px] font-bold text-[var(--text-muted)] truncate max-w-[130px] sm:max-w-[170px]">
                 {project.liveUrl ? project.liveUrl.replace("https://", "") : `${project.slug}.app`}
               </span>
-              <span className="text-[9px] font-mono font-bold text-[#c85628]">PREVIEW</span>
+              <span className="text-[9px] font-mono font-bold text-[var(--accent)]">PREVIEW</span>
             </div>
 
             {/* Screenshot Image Container */}
@@ -50,20 +50,20 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <div className="space-y-1 pt-1">
             <div className="flex items-baseline justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-xs font-bold text-[#c85628]">0{index + 1}</span>
-                <h2 className="text-xl md:text-2xl font-bold font-serif text-[#2b211b] tracking-tight line-clamp-1">
-                  <Link href={`/projects/${project.slug}`} className="hover:text-[#c85628] transition-colors">
+                <span className="font-mono text-xs font-bold text-[var(--accent)]">0{index + 1}</span>
+                <h2 className="text-xl md:text-2xl font-bold font-serif text-[var(--text-main)] tracking-tight line-clamp-1">
+                  <Link href={`/projects/${project.slug}`} className="hover:text-[var(--accent)] transition-colors">
                     {project.title}
                   </Link>
                 </h2>
               </div>
-              <span className="px-2.5 py-0.5 rounded-full border border-[#2b211b]/20 bg-[#f6d4b1] text-[10px] font-mono font-bold text-[#c85628] uppercase shrink-0">
+              <span className="px-2.5 py-0.5 rounded-full border border-[var(--border-strong)] bg-[var(--bg-main)] text-[10px] font-mono font-bold text-[var(--accent)] uppercase shrink-0">
                 {project.year}
               </span>
             </div>
 
-            <p className="text-xs text-[#2b211b]/60 font-mono">
-              Client: <span className="text-[#2b211b] font-bold">{project.client}</span> | Role: <span className="text-[#2b211b] font-bold">{project.role}</span>
+            <p className="text-xs text-[var(--text-muted)] font-mono">
+              Client: <span className="text-[var(--text-main)] font-bold">{project.client}</span> | Role: <span className="text-[var(--text-main)] font-bold">{project.role}</span>
             </p>
           </div>
 
@@ -72,7 +72,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {project.tech?.map((t, idx) => (
               <span
                 key={idx}
-                className="px-2.5 py-1 bg-[#f6d4b1]/80 border border-[#2b211b]/15 rounded-lg font-mono text-[11px] font-semibold text-[#2b211b]/90"
+                className="px-2.5 py-1 bg-[var(--bg-main)] border border-[var(--border-subtle)] rounded-lg font-mono text-[11px] font-semibold text-[var(--text-main)]"
               >
                 {t}
               </span>
@@ -80,21 +80,21 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
 
           {/* Compact Summary Description */}
-          <p className="text-xs md:text-sm text-[#2b211b]/80 font-medium leading-relaxed">
+          <p className="text-xs md:text-sm text-[var(--text-muted)] font-medium leading-relaxed">
             {project.description}
           </p>
 
           {/* Expandable Overview Drawer */}
           {isExpanded && (
-            <div className="pt-3 border-t border-[#2b211b]/15 space-y-3 font-mono text-xs animate-in fade-in duration-300">
-              <p className="text-[#2b211b]/80 leading-relaxed font-sans text-xs">
+            <div className="pt-3 border-t border-[var(--border-subtle)] space-y-3 font-mono text-xs animate-in fade-in duration-300">
+              <p className="text-[var(--text-muted)] leading-relaxed font-sans text-xs">
                 {project.longDescription}
               </p>
 
               {project.challenges && project.challenges.length > 0 && (
                 <div className="space-y-1">
-                  <span className="font-bold text-[#c85628] text-[11px] uppercase block">Tantangan Utama:</span>
-                  <ul className="list-disc list-inside text-[#2b211b]/70 space-y-0.5 text-[11px]">
+                  <span className="font-bold text-[var(--accent)] text-[11px] uppercase block">Tantangan Utama:</span>
+                  <ul className="list-disc list-inside text-[var(--text-muted)] space-y-0.5 text-[11px]">
                     {project.challenges.map((c, i) => (
                       <li key={i}>{c}</li>
                     ))}
@@ -106,10 +106,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
 
         {/* Card Footer Actions */}
-        <div className="pt-2 flex items-center justify-between border-t border-[#2b211b]/15">
+        <div className="pt-2 flex items-center justify-between border-t border-[var(--border-subtle)]">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#2b211b]/70 hover:text-[#c85628] transition-colors"
+            className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
           >
             <span>{isExpanded ? "Ringkas" : "Rincian Teknis"}</span>
             {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -117,7 +117,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
           <Link
             href={`/projects/${project.slug}`}
-            className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-[#c85628] text-[#f6d4b1] rounded-full font-mono text-xs font-bold hover:bg-[#a8441c] transition-colors shadow-sm"
+            className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-[var(--accent)] text-white rounded-full font-mono text-xs font-bold hover:opacity-90 transition-opacity shadow-sm"
           >
             <span>Detail Proyek</span>
             <ArrowUpRight size={13} />
@@ -167,18 +167,18 @@ export default function Projects() {
     <section
       id="projects"
       ref={containerRef}
-      className="py-16 md:py-24 px-6 max-w-5xl mx-auto text-[#2b211b]"
+      className="py-16 md:py-24 px-6 max-w-5xl mx-auto text-[var(--text-main)]"
     >
-      <hr className="border-[#2b211b]/20 mb-8" />
+      <hr className="border-[var(--border-subtle)] mb-8" />
 
       {/* Main Section Header */}
       <div className="flex items-center justify-between gap-4 mb-6">
-        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[#2b211b]">
-          {projects.titleMain || "Projects"} <span className="text-[#c85628]">{projects.titleHighlight}</span>
+        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[var(--text-main)]">
+          {projects.titleMain || "Projects"} <span className="text-[var(--accent)]">{projects.titleHighlight}</span>
         </h1>
         <Link
           href={projects.ctaLink || "/projects"}
-          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold tracking-widest text-[#c85628] hover:underline uppercase"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold tracking-widest text-[var(--accent)] hover:underline uppercase"
         >
           <span>See All ({projectItems.length})</span>
           <ArrowUpRight className="w-4 h-4" />
@@ -192,12 +192,12 @@ export default function Projects() {
         ))}
       </div>
 
-      <hr className="border-[#2b211b]/20 my-12" />
+      <hr className="border-[var(--border-subtle)] my-12" />
 
       <div className="text-center pt-2">
         <Link
           href={projects.ctaLink || "/projects"}
-          className="px-8 py-3.5 rounded-full bg-[#2b211b] text-[#f6d4b1] hover:bg-[#c85628] hover:text-white font-mono text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center gap-2 shadow-md"
+          className="px-8 py-3.5 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] hover:bg-[var(--accent)] hover:text-white font-mono text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center gap-2 shadow-md"
         >
           <span>{projects.ctaText || "Browse Full Project Archive"}</span>
           <ArrowUpRight size={16} />

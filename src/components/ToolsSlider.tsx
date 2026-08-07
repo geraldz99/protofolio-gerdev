@@ -45,17 +45,17 @@ export default function ToolsSlider() {
     <section
       id="tools"
       ref={containerRef}
-      className="py-16 md:py-24 px-6 max-w-5xl mx-auto text-[#2b211b]"
+      className="py-16 md:py-24 px-6 max-w-5xl mx-auto text-[var(--text-main)]"
     >
-      <hr className="border-[#2b211b]/20 mb-8" />
+      <hr className="border-[var(--border-subtle)] mb-8" />
 
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[#2b211b]">
+        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[var(--text-main)]">
           {tools.titleMain || "Teknologi &"}{" "}
-          <span className="text-[#c85628]">{tools.titleHighlight || "Perangkat Utama"}</span>
+          <span className="text-[var(--accent)]">{tools.titleHighlight || "Perangkat Utama"}</span>
         </h1>
-        <span className="px-3.5 py-1 rounded-full border border-[#2b211b]/20 bg-[#ebd0b5]/80 font-mono text-xs font-bold text-[#c85628] uppercase tracking-wider self-start md:self-auto">
+        <span className="px-3.5 py-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)]/80 font-mono text-xs font-bold text-[var(--accent)] uppercase tracking-wider self-start md:self-auto">
           {tools.sectionBadge || "04 // PERANGKAT"}
         </span>
       </div>
@@ -65,23 +65,23 @@ export default function ToolsSlider() {
         {toolItems.map((tool) => (
           <div
             key={tool.id}
-            className="tool-block p-5 rounded-2xl bg-[#ebd0b5]/70 border border-[#2b211b]/20 hover:border-[#c85628] transition-all flex items-center gap-4 shadow-sm group"
+            className="tool-block p-5 rounded-2xl bg-[var(--bg-card)]/70 border border-[var(--border-subtle)] hover:border-[var(--accent)] transition-all flex items-center gap-4 shadow-sm group"
           >
-            <div className="w-12 h-12 rounded-xl bg-[#f6d4b1] border border-[#2b211b]/20 flex items-center justify-center p-2.5 shrink-0 group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-[var(--bg-main)] border border-[var(--border-strong)] flex items-center justify-center p-2.5 shrink-0 group-hover:scale-105 transition-transform">
               <Image
                 src={tool.logoSrc}
                 alt={tool.name}
                 width={28}
                 height={28}
-                className={`object-contain ${tool.isMonochrome ? "opacity-90" : ""}`}
+                className={`object-contain dark:invert ${tool.isMonochrome ? "opacity-90" : ""}`}
               />
             </div>
 
             <div className="min-w-0">
-              <h3 className="text-sm font-bold font-serif text-[#2b211b] group-hover:text-[#c85628] transition-colors truncate">
+              <h3 className="text-sm font-bold font-serif text-[var(--text-main)] group-hover:text-[var(--accent)] transition-colors truncate">
                 {tool.name}
               </h3>
-              <p className="text-[11px] font-mono text-[#2b211b]/60 truncate mt-0.5">
+              <p className="text-[11px] font-mono text-[var(--text-muted)] truncate mt-0.5">
                 {tool.category}
               </p>
             </div>

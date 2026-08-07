@@ -45,23 +45,23 @@ export default function ExperienceTimeline() {
     <section
       id="experience"
       ref={containerRef}
-      className="py-16 md:py-24 px-6 max-w-5xl mx-auto text-[#2b211b]"
+      className="py-16 md:py-24 px-6 max-w-5xl mx-auto text-[var(--text-main)]"
     >
-      <hr className="border-[#2b211b]/20 mb-8" />
+      <hr className="border-[var(--border-subtle)] mb-8" />
 
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[#2b211b]">
+        <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight text-[var(--text-main)]">
           {experience.titleMain || "Pengalaman"}{" "}
-          <span className="text-[#c85628]">{experience.titleHighlight || "Kerja"}</span>
+          <span className="text-[var(--accent)]">{experience.titleHighlight || "Kerja"}</span>
         </h1>
-        <span className="px-3.5 py-1 rounded-full border border-[#2b211b]/20 bg-[#ebd0b5]/80 font-mono text-xs font-bold text-[#c85628] uppercase tracking-wider self-start md:self-auto">
+        <span className="px-3.5 py-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)]/80 font-mono text-xs font-bold text-[var(--accent)] uppercase tracking-wider self-start md:self-auto">
           {experience.sectionBadge || "02 // REKAM JEJAK"}
         </span>
       </div>
 
       {experience.subText && (
-        <p className="text-sm md:text-base text-[#2b211b]/80 font-medium max-w-2xl mb-8 leading-relaxed">
+        <p className="text-sm md:text-base text-[var(--text-muted)] font-medium max-w-2xl mb-8 leading-relaxed">
           {experience.subText}
         </p>
       )}
@@ -71,24 +71,24 @@ export default function ExperienceTimeline() {
         {expItems.map((exp) => (
           <div
             key={exp.id}
-            className="exp-block p-6 md:p-8 rounded-3xl border border-[#2b211b]/20 bg-[#ebd0b5]/70 hover:bg-[#ebd0b5] transition-all space-y-4 shadow-sm group"
+            className="exp-block p-6 md:p-8 rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/70 hover:bg-[var(--bg-card)] transition-all space-y-4 shadow-sm group"
           >
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#2b211b]/15 pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border-subtle)] pb-4">
               <div>
-                <h3 className="text-lg md:text-xl font-bold font-serif text-[#2b211b] group-hover:text-[#c85628] transition-colors">
+                <h3 className="text-lg md:text-xl font-bold font-serif text-[var(--text-main)] group-hover:text-[var(--accent)] transition-colors">
                   {exp.role}
                 </h3>
-                <p className="text-xs font-mono text-[#c85628] font-bold mt-0.5">
+                <p className="text-xs font-mono text-[var(--accent)] font-bold mt-0.5">
                   @ {exp.company}
                 </p>
               </div>
 
-              <span className="px-3 py-1 bg-[#f6d4b1] border border-[#2b211b]/20 rounded-full text-xs font-mono font-bold text-[#2b211b] shrink-0 self-start sm:self-auto">
+              <span className="px-3 py-1 bg-[var(--bg-main)] border border-[var(--border-strong)] rounded-full text-xs font-mono font-bold text-[var(--text-main)] shrink-0 self-start sm:self-auto">
                 {exp.year}
               </span>
             </div>
 
-            <p className="text-xs md:text-sm text-[#2b211b]/85 leading-relaxed font-medium">
+            <p className="text-xs md:text-sm text-[var(--text-muted)] leading-relaxed font-medium">
               {exp.description}
             </p>
           </div>
@@ -99,7 +99,7 @@ export default function ExperienceTimeline() {
         <div className="mt-8 text-center">
           <a
             href={experience.ctaLink || "mailto:geraldinefirdaus99@gmail.com"}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#c85628] text-[#f6d4b1] font-mono text-xs font-bold rounded-xl uppercase tracking-wider hover:bg-[#a8441c] transition-colors shadow-md"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent)] text-white font-mono text-xs font-bold rounded-xl uppercase tracking-wider hover:opacity-90 transition-opacity shadow-md"
           >
             <span>{experience.ctaText}</span>
             <ArrowUpRight size={15} />
