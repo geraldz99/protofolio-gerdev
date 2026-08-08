@@ -156,7 +156,7 @@ export default function About() {
               className="about-item p-6 rounded-2xl bg-[var(--bg-card)]/80 border border-[var(--border-subtle)] hover:border-[var(--accent)] hover:-translate-y-1 transition-all space-y-3 shadow-sm group"
             >
               <span className="text-xs font-mono text-[var(--accent)] font-bold tracking-widest block">
-                {item.num} //
+                {item.num}
               </span>
               <h3 className="text-base md:text-lg font-bold font-serif text-[var(--text-main)] group-hover:text-[var(--accent)] transition-colors">
                 {item.title}

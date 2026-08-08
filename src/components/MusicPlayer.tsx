@@ -2,8 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { Pause, Play, Volume2, VolumeX, Youtube } from "lucide-react";
 import { usePortfolio } from "@/context/PortfolioContext";
+
+function getYouTubeId(url: string): string | null {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
+}
 
 export default function MusicPlayer() {
   const { state } = usePortfolio();
@@ -11,24 +18,14 @@ export default function MusicPlayer() {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [progress, setProgress] = useState(0);
+
+  const youtubeId = getYouTubeId(music.audioUrl || "");
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const discRef = useRef<HTMLDivElement>(null);
 
+  // Handle vinyl rotation animation
   useEffect(() => {
-    const audioSrc = music.audioUrl || "/audio/FUR - Walking Back Home.mp3";
-    audioRef.current = new Audio(audioSrc);
-    audioRef.current.loop = true;
-
-    const updateProgress = () => {
-      if (audioRef.current && audioRef.current.duration) {
-        const p = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-        setProgress(p);
-      }
-    };
-
-    audioRef.current.addEventListener("timeupdate", updateProgress);
-
     const discTween = gsap.to(discRef.current, {
       rotation: 360,
       duration: 8,
@@ -39,38 +36,97 @@ export default function MusicPlayer() {
 
     if (isPlaying) {
       discTween.resume();
+    } else {
+      discTween.pause();
     }
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener("timeupdate", updateProgress);
-        audioRef.current.pause();
-      }
       discTween.kill();
     };
-  }, [music.audioUrl]);
+  }, [isPlaying]);
+
+  // Handle standard HTML5 audio setup when not using YouTube
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsPlaying(false);
+
+    if (!youtubeId && music.audioUrl) {
+      const audioSrc = music.audioUrl;
+      audioRef.current = new Audio(audioSrc);
+      audioRef.current.loop = true;
+
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+      };
+    }
+  }, [music.audioUrl, youtubeId]);
 
   const togglePlay = () => {
-    if (!audioRef.current) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
+    if (youtubeId) {
+      if (isPlaying) {
+        iframeRef.current?.contentWindow?.postMessage(
+          JSON.stringify({ event: "command", func: "pauseVideo", args: "" }),
+          "*"
+        );
+        setIsPlaying(false);
+      } else {
+        iframeRef.current?.contentWindow?.postMessage(
+          JSON.stringify({ event: "command", func: "playVideo", args: "" }),
+          "*"
+        );
+        setIsPlaying(true);
+      }
     } else {
-      audioRef.current.play().catch(() => {});
-      setIsPlaying(true);
+      if (!audioRef.current) return;
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play().catch(() => {});
+        setIsPlaying(true);
+      }
     }
   };
 
   const toggleMute = () => {
-    if (!audioRef.current) return;
-    audioRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
+    if (youtubeId) {
+      if (isMuted) {
+        iframeRef.current?.contentWindow?.postMessage(
+          JSON.stringify({ event: "command", func: "unMute", args: "" }),
+          "*"
+        );
+        setIsMuted(false);
+      } else {
+        iframeRef.current?.contentWindow?.postMessage(
+          JSON.stringify({ event: "command", func: "mute", args: "" }),
+          "*"
+        );
+        setIsMuted(true);
+      }
+    } else {
+      if (!audioRef.current) return;
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
   };
 
   return (
     <section id="music" className="py-12 px-6 max-w-4xl mx-auto text-[#2b211b]">
       <hr className="border-[#2b211b]/20 mb-8" />
+
+      {/* Hidden YouTube Iframe Player if audioUrl is a YouTube URL */}
+      {youtubeId && (
+        <iframe
+          ref={iframeRef}
+          className="hidden"
+          src={`https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&autoplay=0&controls=0`}
+          allow="autoplay"
+          title="YouTube Music Player"
+        />
+      )}
 
       <div className="p-6 md:p-8 rounded-3xl bg-[#ebd0b5]/80 border border-[#2b211b]/20 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Left Info & Controls */}
@@ -84,9 +140,16 @@ export default function MusicPlayer() {
           </div>
 
           <div className="min-w-0">
-            <span className="text-[10px] font-mono font-bold text-[#c85628] uppercase tracking-widest block">
-              {music.sectionBadge || "08 // VIBE & MUSIC"}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono font-bold text-[#c85628] uppercase tracking-widest block">
+                {music.sectionBadge || "08 // VIBE & MUSIC"}
+              </span>
+              {youtubeId && (
+                <span className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full bg-[#c85628]/10 text-[#c85628] border border-[#c85628]/30">
+                  <Youtube size={10} /> YouTube
+                </span>
+              )}
+            </div>
             <h3 className="text-base md:text-lg font-bold font-serif text-[#2b211b] truncate">
               {music.title || "Walking Back Home"}
             </h3>

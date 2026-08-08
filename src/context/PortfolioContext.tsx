@@ -398,6 +398,7 @@ const DEFAULT_PORTFOLIO_STATE: PortfolioState = {
 interface PortfolioContextType {
   state: PortfolioState;
   updateSection: <K extends keyof PortfolioState>(key: K, data: PortfolioState[K]) => void;
+  saveFullState: (newState: PortfolioState) => Promise<void>;
   resetAll: () => void;
   isLoading: boolean;
 }
@@ -477,6 +478,27 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const saveFullState = async (newState: PortfolioState) => {
+    setState(newState);
+
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newState));
+    } catch {
+      // Handle quota storage
+    }
+
+    if (supabase) {
+      const { error } = await supabase
+        .from("portfolio")
+        .upsert({ key: "main", data: newState }, { onConflict: "key" });
+
+      if (error) {
+        console.error("Supabase save error:", error.message, error);
+        throw error;
+      }
+    }
+  };
+
   const resetAll = () => {
     setState(DEFAULT_PORTFOLIO_STATE);
     try {
@@ -498,7 +520,7 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <PortfolioContext.Provider value={{ state, updateSection, resetAll, isLoading: !initialized }}>
+    <PortfolioContext.Provider value={{ state, updateSection, saveFullState, resetAll, isLoading: !initialized }}>
       {children}
     </PortfolioContext.Provider>
   );

@@ -66,16 +66,21 @@ export default function MusicEditor({ data, onChange }: MusicEditorProps) {
             </div>
           </div>
 
-          {/* URL Audio MP3 */}
+          {/* URL Audio MP3 / YouTube */}
           <div className="space-y-2">
-            <label className="text-xs font-mono text-[#2b211b]/80 font-semibold block">URL Berkas Audio MP3 (Audio File Path)</label>
+            <label className="text-xs font-mono text-[#2b211b]/80 font-semibold block">
+              URL Audio MP3 atau Link YouTube / YouTube Music
+            </label>
             <input
               type="text"
               value={data.audioUrl}
               onChange={(e) => onChange({ ...data, audioUrl: e.target.value })}
-              placeholder="e.g. /audio/FUR - Walking Back Home.mp3"
+              placeholder="e.g. https://music.youtube.com/watch?v=... atau /audio/song.mp3"
               className="w-full px-4 py-3 bg-[#f6d4b1] border border-[#2b211b]/20 rounded-xl text-xs font-mono text-[#2b211b] placeholder-[#2b211b]/40 focus:outline-none focus:border-[#c85628]"
             />
+            <p className="text-[11px] font-mono text-[#2b211b]/60">
+              💡 Boleh memasukkan link <strong>YouTube / YouTube Music</strong> (misal: <code>https://music.youtube.com/watch?v=...</code>) atau path berkas MP3 lokal (misal: <code>/audio/FUR - Walking Back Home.mp3</code>).
+            </p>
           </div>
 
           {/* Sub Text */}

@@ -125,7 +125,7 @@ export default function Navbar() {
                   className="group flex items-baseline gap-4 text-4xl md:text-7xl font-bold font-serif text-[var(--text-main)] hover:text-[var(--accent)] hover:translate-x-4 transition-all duration-300 tracking-tight"
                 >
                   <span className="font-mono text-xs font-bold text-[var(--accent)] group-hover:text-[var(--text-main)] transition-colors">
-                    {link.num} //
+                    {link.num}
                   </span>
                   <span>{link.name}</span>
                 </Link>

@@ -61,7 +61,7 @@ type SectionTab =
   | "testimonials";
 
 export default function AdminDashboardPage() {
-  const { state, updateSection } = usePortfolio();
+  const { state, saveFullState } = usePortfolio();
   const router = useRouter();
 
   useEffect(() => {
@@ -85,6 +85,8 @@ export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<SectionTab>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [saveToast, setSaveToast] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   // SECTION STATES (Synchronized with PortfolioContext)
   const [heroData, setHeroData] = useState(state.hero);
@@ -119,24 +121,39 @@ export default function AdminDashboardPage() {
     setTestimonialsData(state.testimonials);
   }, [state]);
 
-  const triggerSave = () => {
-    // Save all active section data into PortfolioContext & LocalStorage
-    updateSection("hero", heroData);
-    updateSection("about", aboutData);
-    updateSection("experience", experienceData);
-    updateSection("skills", skillsData);
-    updateSection("tools", toolsData);
-    updateSection("process", processData);
-    updateSection("projects", projectsData);
-    updateSection("music", musicData);
-    updateSection("stats", statsData);
-    updateSection("github", githubData);
-    updateSection("faq", faqData);
-    updateSection("awards", awards);
-    updateSection("testimonials", testimonialsData);
+  const triggerSave = async () => {
+    setIsSaving(true);
+    setSaveError(null);
 
-    setSaveToast(true);
-    setTimeout(() => setSaveToast(false), 3000);
+    const fullState: PortfolioState = {
+      hero: heroData,
+      about: aboutData,
+      experience: experienceData,
+      skills: skillsData,
+      tools: toolsData,
+      process: processData,
+      projects: projectsData,
+      music: musicData,
+      stats: statsData,
+      github: githubData,
+      faq: faqData,
+      awards: awards,
+      testimonials: testimonialsData,
+      cta: state.cta,
+    };
+
+    try {
+      await saveFullState(fullState);
+      setSaveToast(true);
+      setTimeout(() => setSaveToast(false), 3000);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const msg = err?.message || "Gagal menyimpan ke Supabase";
+      setSaveError(msg);
+      console.error("Supabase Save Error:", err);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const navMenuItems = [
@@ -163,6 +180,16 @@ export default function AdminDashboardPage() {
         <div className="fixed top-6 right-6 z-50 bg-[#c85628] text-[#f6d4b1] px-5 py-3 rounded-2xl font-mono text-xs font-bold flex items-center gap-2 shadow-xl border border-[#2b211b]/20 animate-in fade-in slide-in-from-top-4">
           <CheckCircle2 size={18} />
           <span>Seluruh Konten Berhasil Disimpan & Sinkron!</span>
+        </div>
+      )}
+
+      {/* Save Error Toast Notification */}
+      {saveError && (
+        <div className="fixed top-6 right-6 z-50 bg-red-600 text-white px-5 py-3 rounded-2xl font-mono text-xs font-bold flex items-center justify-between gap-4 shadow-xl border border-red-800 animate-in fade-in slide-in-from-top-4 max-w-md">
+          <span>⚠️ {saveError}</span>
+          <button onClick={() => setSaveError(null)} className="underline text-xs">
+            Tutup
+          </button>
         </div>
       )}
 
@@ -257,10 +284,11 @@ export default function AdminDashboardPage() {
 
           <button
             onClick={triggerSave}
-            className="px-5 py-2 bg-[#c85628] text-[#f6d4b1] rounded-xl font-mono text-xs font-bold uppercase tracking-wider hover:bg-[#a8441c] active:scale-95 transition-all flex items-center gap-2 cursor-pointer shadow-md"
+            disabled={isSaving}
+            className="px-5 py-2 bg-[#c85628] text-[#f6d4b1] rounded-xl font-mono text-xs font-bold uppercase tracking-wider hover:bg-[#a8441c] active:scale-95 disabled:opacity-50 transition-all flex items-center gap-2 cursor-pointer shadow-md"
           >
             <Save size={15} />
-            <span>Simpan Perubahan</span>
+            <span>{isSaving ? "Menyimpan..." : "Simpan Perubahan"}</span>
           </button>
         </header>
 
