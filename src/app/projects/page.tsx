@@ -7,10 +7,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 const ITEMS_PER_PAGE = 8;
 
 export default function AllProjectsPage() {
+  const { state } = usePortfolio();
+  const allProjects = state.projects?.items?.length ? state.projects.items : PROJECTS;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const projectsGridRef = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("SEMUA");
@@ -19,10 +23,10 @@ export default function AllProjectsPage() {
 
   const categories = [
     "SEMUA",
-    ...Array.from(new Set(PROJECTS.map((p) => p.category))),
+    ...Array.from(new Set(allProjects.map((p) => p.category))),
   ];
 
-  const filteredProjects = PROJECTS.filter((p) => {
+  const filteredProjects = allProjects.filter((p) => {
     const matchesCat = selectedCategory === "SEMUA" || p.category === selectedCategory;
     const q = searchQuery.toLowerCase().trim();
     if (!q) return matchesCat;
@@ -78,39 +82,39 @@ export default function AllProjectsPage() {
   return (
     <div
       ref={containerRef}
-      className="bg-[#f6d4b1] text-[#2b211b] min-h-screen relative overflow-hidden"
+      className="bg-[var(--bg-main)] text-[var(--text-main)] min-h-screen relative overflow-hidden transition-colors duration-300"
     >
       {/* Header Section */}
       <header className="pt-28 md:pt-33 px-6 md:px-24 max-w-7xl mx-auto space-y-8">
         <div className="space-y-4">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#c85628] font-mono text-xs font-bold uppercase tracking-widest group hover:underline"
+            className="inline-flex items-center gap-2 text-[var(--accent)] font-mono text-xs font-bold uppercase tracking-widest group hover:underline"
           >
             <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
             Kembali ke Beranda
           </Link>
 
           <div className="space-y-2">
-            <span className="text-[#c85628] text-xs md:text-sm font-mono font-semibold uppercase tracking-[0.4em] block">
+            <span className="text-[var(--accent)] text-xs md:text-sm font-mono font-semibold uppercase tracking-[0.4em] block">
               ARSIP LENGKAP KARYA
             </span>
-            <h1 className="text-4xl md:text-7xl lg:text-8xl font-semibold uppercase tracking-tight leading-none text-[#2b211b]">
-              Eksplorasi & <span className="text-[#c85628]">Proyek Digital</span>
+            <h1 className="text-4xl md:text-7xl lg:text-8xl font-semibold uppercase tracking-tight leading-none text-[var(--text-main)]">
+              Eksplorasi & <span className="text-[var(--accent)]">Proyek Digital</span>
             </h1>
           </div>
         </div>
 
         {/* Category Filter Tabs (Scrollable on mobile, flex-wrap on desktop, with bottom border line) */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 pt-4 border-b border-[#2b211b]/15 [scrollbar-width:none] [-ms-overflow-style:none] md:flex-wrap md:pb-6">
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 pt-4 border-b border-[var(--border-subtle)] [scrollbar-width:none] [-ms-overflow-style:none] md:flex-wrap md:pb-6">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => handleCategoryChange(cat)}
               className={`px-4 py-2.5 rounded-full text-xs font-mono font-semibold transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                 selectedCategory === cat
-                  ? "bg-[#2b211b] text-[#f6d4b1] font-bold shadow-lg"
-                  : "bg-[#ebd0b5]/60 border border-[#2b211b]/20 text-[#2b211b]/80 hover:text-[#c85628] hover:border-[#c85628]/40"
+                  ? "bg-[var(--text-main)] text-[var(--bg-main)] font-bold shadow-lg"
+                  : "bg-[var(--bg-card)]/60 border border-[var(--border-subtle)] text-[var(--text-main)]/80 hover:text-[var(--accent)] hover:border-[var(--accent)]/40"
               }`}
             >
               {cat}
@@ -121,7 +125,7 @@ export default function AllProjectsPage() {
         {/* Live Search Input (Di bawah category line, pojok kanan, tanpa garis pembatas bawah) */}
         <div className="flex justify-end pt-3 pb-0">
           <div className="relative max-w-xs md:max-w-sm w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#2b211b]/50 w-4 h-4" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] w-4 h-4" />
             <input
               type="text"
               value={searchQuery}
@@ -130,7 +134,7 @@ export default function AllProjectsPage() {
                 setCurrentPage(1);
               }}
               placeholder="Cari proyek, tech stack..."
-              className="w-full pl-11 pr-10 py-2.5 bg-[#ebd0b5]/80 border border-[#2b211b]/20 rounded-full text-xs font-mono text-[#2b211b] placeholder-[#2b211b]/50 focus:outline-none focus:border-[#c85628] transition-colors shadow-lg"
+              className="w-full pl-11 pr-10 py-2.5 bg-[var(--bg-card)]/80 border border-[var(--border-subtle)] rounded-full text-xs font-mono text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] transition-colors shadow-lg"
             />
             {searchQuery && (
               <button
@@ -138,7 +142,7 @@ export default function AllProjectsPage() {
                   setSearchQuery("");
                   setCurrentPage(1);
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#2b211b]/50 hover:text-[#2b211b] rounded-full cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[var(--text-muted)] hover:text-[var(--text-main)] rounded-full cursor-pointer"
                 title="Hapus pencarian"
               >
                 <X size={14} />
@@ -160,10 +164,10 @@ export default function AllProjectsPage() {
                 key={project.id}
                 href={`/projects/${project.slug}`}
                 data-cursor="view"
-                className="project-card-archive group rounded-3xl bg-[#ebd0b5]/80 border border-[#2b211b]/15 hover:border-[#c85628]/50 transition-all duration-500 flex flex-col overflow-hidden hover:-translate-y-2 shadow-xl hover:shadow-[0_20px_40px_rgba(200,86,40,0.12)] cursor-pointer"
+                className="project-card-archive group rounded-3xl bg-[var(--bg-card)]/80 border border-[var(--border-subtle)] hover:border-[var(--accent)]/50 transition-all duration-500 flex flex-col overflow-hidden hover:-translate-y-2 shadow-xl hover:shadow-[0_20px_40px_rgba(200,86,40,0.12)] cursor-pointer"
               >
                 {/* Image Box */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f6d4b1]">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--bg-main)]">
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -171,15 +175,15 @@ export default function AllProjectsPage() {
                     className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
                     unoptimized
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#ebd0b5] via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-transparent to-transparent opacity-80" />
 
                   {/* Category Tag */}
-                  <div className="absolute top-4 left-4 px-3 py-1 bg-[#f6d4b1]/90 backdrop-blur-md rounded-full border border-[#2b211b]/20 text-xs font-mono text-[#2b211b] font-semibold">
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-[var(--bg-main)]/90 backdrop-blur-md rounded-full border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-main)] font-semibold">
                     {project.category}
                   </div>
 
                   {/* Number */}
-                  <div className="absolute top-4 right-4 px-3 py-1 bg-[#f6d4b1]/90 backdrop-blur-md rounded-full border border-[#2b211b]/20 text-xs font-mono text-[#2b211b]/80 font-semibold">
+                  <div className="absolute top-4 right-4 px-3 py-1 bg-[var(--bg-main)]/90 backdrop-blur-md rounded-full border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-main)]/80 font-semibold">
                     {numStr}
                   </div>
                 </div>
@@ -188,22 +192,22 @@ export default function AllProjectsPage() {
                 <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-xl md:text-2xl font-bold text-[#2b211b] group-hover:text-[#c85628] transition-colors tracking-tight">
+                      <h3 className="text-xl md:text-2xl font-bold text-[var(--text-main)] group-hover:text-[var(--accent)] transition-colors tracking-tight">
                         {project.title}
                       </h3>
-                      <ArrowUpRight className="w-5 h-5 text-[#2b211b]/40 group-hover:text-[#c85628] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 shrink-0" />
+                      <ArrowUpRight className="w-5 h-5 text-[var(--text-muted)] group-hover:text-[var(--accent)] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 shrink-0" />
                     </div>
-                    <p className="text-xs md:text-sm text-[#2b211b]/70 leading-relaxed font-medium line-clamp-2">
+                    <p className="text-xs md:text-sm text-[var(--text-muted)] leading-relaxed font-medium line-clamp-2">
                       {project.description}
                     </p>
                   </div>
 
                   {/* Tech Stack */}
-                  <div className="flex flex-wrap gap-2 pt-2 border-t border-[#2b211b]/15">
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--border-subtle)]">
                     {project.tech.map((t) => (
                       <span
                         key={t}
-                        className="px-3 py-1 bg-[#f6d4b1]/60 border border-[#2b211b]/20 rounded-full text-xs font-mono text-[#2b211b]/80 group-hover:border-[#c85628]/40 group-hover:text-[#c85628] transition-colors"
+                        className="px-3 py-1 bg-[var(--bg-main)]/60 border border-[var(--border-subtle)] rounded-full text-xs font-mono text-[var(--text-main)]/80 group-hover:border-[var(--accent)]/40 group-hover:text-[var(--accent)] transition-colors"
                       >
                         {t}
                       </span>
@@ -217,11 +221,11 @@ export default function AllProjectsPage() {
 
         {/* Pagination Bar (Only show if totalPages > 1) */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-3 pt-12 border-t border-[#2b211b]/15">
+          <div className="flex items-center justify-center gap-3 pt-12 border-t border-[var(--border-subtle)]">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-3 rounded-full border border-[#2b211b]/20 bg-[#ebd0b5] text-[#2b211b] flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#c85628] hover:text-white hover:border-[#c85628] transition-colors cursor-pointer"
+              className="p-3 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] text-[var(--text-main)] flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-colors cursor-pointer"
               aria-label="Halaman Sebelumnya"
             >
               <ChevronLeft size={18} />
@@ -236,8 +240,8 @@ export default function AllProjectsPage() {
                     onClick={() => handlePageChange(pageNum)}
                     className={`w-10 h-10 rounded-full font-mono text-xs font-bold transition-all cursor-pointer ${
                       currentPage === pageNum
-                        ? "bg-[#2b211b] text-[#f6d4b1] shadow-lg"
-                        : "bg-[#ebd0b5]/60 border border-[#2b211b]/20 text-[#2b211b]/80 hover:border-[#c85628] hover:text-[#c85628]"
+                        ? "bg-[var(--text-main)] text-[var(--bg-main)] shadow-lg"
+                        : "bg-[var(--bg-card)]/60 border border-[var(--border-subtle)] text-[var(--text-main)]/80 hover:border-[var(--accent)] hover:text-[var(--accent)]"
                     }`}
                   >
                     {pageNum}
@@ -249,7 +253,7 @@ export default function AllProjectsPage() {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-3 rounded-full border border-[#2b211b]/20 bg-[#ebd0b5] text-[#2b211b] flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#c85628] hover:text-white hover:border-[#c85628] transition-colors cursor-pointer"
+              className="p-3 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] text-[var(--text-main)] flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-colors cursor-pointer"
               aria-label="Halaman Selanjutnya"
             >
               <ChevronRight size={18} />
@@ -259,15 +263,15 @@ export default function AllProjectsPage() {
       </main>
 
       {/* Footer / Back to Home CTA */}
-      <section className="py-24 md:py-36 px-6 bg-transparent border-t border-[#2b211b]/15 text-center">
+      <section className="py-24 md:py-36 px-6 bg-transparent border-t border-[var(--border-subtle)] text-center">
         <div className="max-w-4xl mx-auto space-y-6">
-          <span className="text-xs uppercase tracking-[0.4em] text-[#c85628] font-mono font-semibold block">
+          <span className="text-xs uppercase tracking-[0.4em] text-[var(--accent)] font-mono font-semibold block">
             TERIMA KASIH TELAH MENJELAJAH
           </span>
           <Link href="/" className="group inline-block">
-            <h2 className="text-3xl md:text-6xl font-semibold uppercase tracking-tight text-[#2b211b] group-hover:text-[#c85628] transition-colors duration-500 flex items-center justify-center gap-4">
+            <h2 className="text-3xl md:text-6xl font-semibold uppercase tracking-tight text-[var(--text-main)] group-hover:text-[var(--accent)] transition-colors duration-500 flex items-center justify-center gap-4">
               <span>Kembali ke Halaman Utama</span>
-              <ArrowLeft className="w-8 h-8 md:w-16 md:h-16 text-[#c85628] group-hover:-translate-x-2 transition-transform duration-300" />
+              <ArrowLeft className="w-8 h-8 md:w-16 md:h-16 text-[var(--accent)] group-hover:-translate-x-2 transition-transform duration-300" />
             </h2>
           </Link>
         </div>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
-import { Github, Linkedin, Mail, ArrowUpRight } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUpRight, Lock } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const NAV_LINKS = [
@@ -136,7 +136,17 @@ export default function Navbar() {
 
         {/* Footer info inside menu */}
         <div className="max-w-4xl mx-auto w-full border-t border-[var(--border-subtle)] pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-[var(--text-muted)]">
-          <p>© 2026 Geraldine Firdaus. Back-End Developer.</p>
+          <div className="flex items-center gap-4">
+            <p>© 2026 Geraldine Firdaus. Back-End Developer.</p>
+            <Link
+              href="/admin"
+              onClick={() => setIsOpen(false)}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-card)] border border-[var(--border-strong)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white font-bold transition-all shadow-sm"
+            >
+              <Lock size={12} />
+              <span>Panel Admin</span>
+            </Link>
+          </div>
           <div className="flex items-center gap-6 font-bold">
             <a href="https://github.com/geraldz99" target="_blank" rel="noreferrer" className="hover:text-[var(--accent)] inline-flex items-center gap-1">
               <span>GitHub</span>

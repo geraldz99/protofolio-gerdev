@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GitHubCalendar } from "react-github-calendar";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,8 +13,11 @@ export default function GitHubContributions() {
   const { github } = state;
   const { theme: currentTheme } = useTheme();
   const containerRef = useRef<HTMLElement>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
@@ -70,15 +73,21 @@ export default function GitHubContributions() {
         </a>
       </div>
 
-      <div className="github-block p-6 rounded-3xl bg-[var(--bg-card)]/80 border border-[var(--border-subtle)] shadow-sm overflow-x-auto flex justify-center transition-colors duration-300">
-        <GitHubCalendar
-          username={github.username || "geraldz99"}
-          colorScheme={currentTheme}
-          theme={calendarTheme}
-          fontSize={12}
-          blockSize={11}
-          blockMargin={4}
-        />
+      <div className="github-block p-6 rounded-3xl bg-[var(--bg-card)]/80 border border-[var(--border-subtle)] shadow-sm overflow-x-auto flex justify-center min-h-[160px] items-center transition-colors duration-300">
+        {mounted ? (
+          <GitHubCalendar
+            username={github.username || "geraldz99"}
+            colorScheme={currentTheme}
+            theme={calendarTheme}
+            fontSize={12}
+            blockSize={11}
+            blockMargin={4}
+          />
+        ) : (
+          <div className="h-28 flex items-center justify-center font-mono text-xs text-[var(--text-muted)] animate-pulse">
+            Memuat kalender kontribusi GitHub...
+          </div>
+        )}
       </div>
     </section>
   );

@@ -136,7 +136,7 @@ export const PROJECTS: Project[] = [
     image: "/projects/spmb.jpg",
     year: "2026",
     client: "Dinas Pendidikan - Kabupaten Musi Rawas",
-    role: "Frontend Developer",
+    role: "Backend Developer",
 
     challenges: [
       "Menyajikan alur pendaftaran yang panjang dengan banyak field, dokumen, validasi, dan pilihan jalur tanpa membuat pengguna bingung.",

@@ -19,6 +19,7 @@ import {
   HelpCircle,
   Award,
   MessageSquareQuote,
+  Mail,
   ExternalLink,
   Save,
   CheckCircle2,
@@ -43,6 +44,7 @@ import GithubEditor from "@/components/admin/GithubEditor";
 import FaqEditor from "@/components/admin/FaqEditor";
 import AwardsEditor from "@/components/admin/AwardsEditor";
 import TestimonialsEditor from "@/components/admin/TestimonialsEditor";
+import CtaEditor from "@/components/admin/CtaEditor";
 
 type SectionTab =
   | "overview"
@@ -58,7 +60,8 @@ type SectionTab =
   | "github"
   | "faq"
   | "awards"
-  | "testimonials";
+  | "testimonials"
+  | "cta";
 
 export default function AdminDashboardPage() {
   const { state, saveFullState } = usePortfolio();
@@ -102,6 +105,7 @@ export default function AdminDashboardPage() {
   const [faqData, setFaqData] = useState(state.faq);
   const [awards, setAwards] = useState(state.awards);
   const [testimonialsData, setTestimonialsData] = useState(state.testimonials);
+  const [ctaData, setCtaData] = useState(state.cta);
 
   // Keep local editor state in sync when context initializes or changes
   useEffect(() => {
@@ -119,6 +123,7 @@ export default function AdminDashboardPage() {
     setFaqData(state.faq);
     setAwards(state.awards);
     setTestimonialsData(state.testimonials);
+    setCtaData(state.cta);
   }, [state]);
 
   const triggerSave = async () => {
@@ -139,7 +144,7 @@ export default function AdminDashboardPage() {
       faq: faqData,
       awards: awards,
       testimonials: testimonialsData,
-      cta: state.cta,
+      cta: ctaData,
     };
 
     try {
@@ -171,6 +176,7 @@ export default function AdminDashboardPage() {
     { id: "faq" as SectionTab, label: "11 / Tanya Jawab (FAQ)", icon: HelpCircle },
     { id: "awards" as SectionTab, label: "12 / Marquee Teks", icon: Award },
     { id: "testimonials" as SectionTab, label: "13 / Testimoni Klien", icon: MessageSquareQuote },
+    { id: "cta" as SectionTab, label: "14 / Hubungi Saya (Kontak)", icon: Mail },
   ];
 
   return (
@@ -348,6 +354,10 @@ export default function AdminDashboardPage() {
 
           {activeTab === "testimonials" && (
             <TestimonialsEditor data={testimonialsData} onChange={(data) => setTestimonialsData(data)} />
+          )}
+
+          {activeTab === "cta" && (
+            <CtaEditor data={ctaData} onChange={(data) => setCtaData(data)} />
           )}
         </main>
       </div>
