@@ -76,8 +76,9 @@ export default function About() {
                 src={about.profileImage || "/projects/gerdev.png"}
                 alt="Geraldine Firdaus Portrait"
                 fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                loading="lazy"
                 className="object-cover group-hover:scale-105 transition-transform duration-700 filter drop-shadow-md"
-                priority
                 unoptimized
               />
               <div className="absolute top-3 left-3 px-3 py-1 bg-[var(--bg-main)]/90 backdrop-blur-md rounded-full border border-[var(--border-subtle)] font-mono text-[10px] font-bold text-[var(--accent)]">

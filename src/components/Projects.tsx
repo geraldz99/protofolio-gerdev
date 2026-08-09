@@ -39,6 +39,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   src={project.image}
                   alt={project.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 500px"
+                  loading="lazy"
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                   unoptimized
                 />

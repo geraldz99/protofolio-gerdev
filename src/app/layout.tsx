@@ -9,6 +9,7 @@ const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
 const playfair = Playfair_Display({
@@ -16,10 +17,11 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://github.com/geraldz99"),
+  metadataBase: new URL("https://geraldev.vercel.app"),
   title: {
     default: "Geraldine Firdaus — Back-End Developer",
     template: "%s | Geraldine Firdaus",
