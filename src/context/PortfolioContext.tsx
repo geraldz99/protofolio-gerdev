@@ -178,7 +178,15 @@ export interface CtaData {
   githubUrl: string;
 }
 
+export interface BrandData {
+  logoText: string;
+  brandName: string;
+  logoImage: string;
+  faviconUrl?: string;
+}
+
 export interface PortfolioState {
+  brand?: BrandData;
   hero: HeroData;
   about: AboutData;
   experience: ExperienceData;
@@ -196,6 +204,12 @@ export interface PortfolioState {
 }
 
 const DEFAULT_PORTFOLIO_STATE: PortfolioState = {
+  brand: {
+    logoText: "GF",
+    brandName: "GERALDINE.DEV",
+    logoImage: "/projects/logo-new.svg",
+    faviconUrl: "/projects/logo-new.svg",
+  },
   hero: {
     bgText: "FULLSTACK",
     prefixText: "Hi there, I’m",

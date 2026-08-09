@@ -94,6 +94,7 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/context/ThemeContext";
+import DynamicFavicon from "@/components/DynamicFavicon";
 
 export default function RootLayout({
   children,
@@ -129,6 +130,7 @@ export default function RootLayout({
         <div className="ambient-blob-3" />
         <ThemeProvider>
           <PortfolioProvider>
+            <DynamicFavicon />
             <LenisProvider>
               {/* <Preloader /> */}
               <NavigationWrapper>{children}</NavigationWrapper>

@@ -20,6 +20,7 @@ import {
   Award,
   MessageSquareQuote,
   Mail,
+  Shield,
   ExternalLink,
   Save,
   CheckCircle2,
@@ -27,10 +28,11 @@ import {
   X,
   LogOut,
 } from "lucide-react";
-import { usePortfolio, PortfolioState } from "@/context/PortfolioContext";
+import { usePortfolio, PortfolioState, BrandData } from "@/context/PortfolioContext";
 
 // Modular Section Editor Components
 import OverviewEditor from "@/components/admin/OverviewEditor";
+import BrandEditor from "@/components/admin/BrandEditor";
 import HeroEditor from "@/components/admin/HeroEditor";
 import AboutEditor from "@/components/admin/AboutEditor";
 import ExperienceEditor from "@/components/admin/ExperienceEditor";
@@ -48,6 +50,7 @@ import CtaEditor from "@/components/admin/CtaEditor";
 
 type SectionTab =
   | "overview"
+  | "brand"
   | "hero"
   | "about"
   | "experience"
@@ -92,6 +95,9 @@ export default function AdminDashboardPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
 
   // SECTION STATES (Synchronized with PortfolioContext)
+  const [brandData, setBrandData] = useState<BrandData>(
+    state.brand || { logoText: "GF", brandName: "GERALDINE.DEV", logoImage: "/projects/logo-new.svg" }
+  );
   const [heroData, setHeroData] = useState(state.hero);
   const [aboutData, setAboutData] = useState(state.about);
   const [experienceData, setExperienceData] = useState(state.experience);
@@ -110,6 +116,7 @@ export default function AdminDashboardPage() {
   // Keep local editor state in sync when context initializes or changes
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (state.brand) setBrandData(state.brand);
     setHeroData(state.hero);
     setAboutData(state.about);
     setExperienceData(state.experience);
@@ -131,6 +138,7 @@ export default function AdminDashboardPage() {
     setSaveError(null);
 
     const fullState: PortfolioState = {
+      brand: brandData,
       hero: heroData,
       about: aboutData,
       experience: experienceData,
@@ -163,6 +171,7 @@ export default function AdminDashboardPage() {
 
   const navMenuItems = [
     { id: "overview" as SectionTab, label: "Overview Dashboard", icon: LayoutDashboard },
+    { id: "brand" as SectionTab, label: "00 / Logo & Branding Navbar", icon: Shield },
     { id: "hero" as SectionTab, label: "01 / Hero Sequence", icon: Sparkles },
     { id: "about" as SectionTab, label: "02 / About (Profil)", icon: User },
     { id: "experience" as SectionTab, label: "03 / Rekam Jejak", icon: Briefcase },
@@ -302,6 +311,10 @@ export default function AdminDashboardPage() {
         <main data-lenis-prevent className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8">
           {activeTab === "overview" && (
             <OverviewEditor items={navMenuItems.slice(1)} onSelectTab={(tab) => setActiveTab(tab as SectionTab)} />
+          )}
+
+          {activeTab === "brand" && (
+            <BrandEditor data={brandData} onChange={(data) => setBrandData(data)} />
           )}
 
           {activeTab === "hero" && (

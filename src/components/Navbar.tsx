@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
+import Image from "next/image";
 import { Github, Linkedin, Mail, ArrowUpRight, Lock } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 const NAV_LINKS = [
   { num: "01", name: "Home", href: "/#home" },
@@ -17,6 +19,8 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { state } = usePortfolio();
+  const brand = state.brand || { logoText: "GF", brandName: "GERALDINE.DEV", logoImage: "/projects/logo-new.svg" };
 
   useEffect(() => {
     if (isOpen) {
@@ -48,11 +52,24 @@ export default function Navbar() {
         <nav className="max-w-5xl mx-auto w-full rounded-full border border-[var(--border-strong)] bg-[var(--bg-card)]/90 backdrop-blur-md px-4 md:px-6 py-2.5 shadow-md flex items-center justify-between pointer-events-auto transition-colors duration-300">
           {/* Left: Brand Logo Badge */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] flex items-center justify-center font-mono font-bold text-xs shadow-inner group-hover:bg-[var(--accent)] group-hover:text-white transition-colors">
-              GF
-            </div>
+            {brand.logoImage ? (
+              <div className="w-8 h-8 rounded-full overflow-hidden relative border border-[var(--border-strong)] bg-[var(--bg-main)] shrink-0 flex items-center justify-center">
+                <Image
+                  src={brand.logoImage}
+                  alt={brand.brandName || "Logo"}
+                  width={32}
+                  height={32}
+                  className="object-contain w-full h-full p-1"
+                  unoptimized={typeof brand.logoImage === "string" && brand.logoImage.startsWith("http")}
+                />
+              </div>
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] flex items-center justify-center font-mono font-bold text-xs shadow-inner group-hover:bg-[var(--accent)] group-hover:text-white transition-colors">
+                {brand.logoText || "GF"}
+              </div>
+            )}
             <span className="font-mono text-xs font-bold text-[var(--text-main)] tracking-wider uppercase hidden sm:inline-block">
-              GERALDINE.DEV
+              {brand.brandName || "GERALDINE.DEV"}
             </span>
           </Link>
 
@@ -111,7 +128,7 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
               <ThemeToggle showLabel />
               <span className="font-mono text-xs font-bold text-[var(--text-muted)] uppercase hidden sm:inline">
-                GERALDINE.DEV
+                {brand.brandName || "GERALDINE.DEV"}
               </span>
             </div>
           </div>
