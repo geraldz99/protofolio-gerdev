@@ -11,6 +11,11 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
+    // Disable Lenis on mobile devices for native 60fps touch scrolling and low TBT
+    if (typeof window !== "undefined" && (window.innerWidth < 768 || "ontouchstart" in window)) {
+      return;
+    }
+
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
@@ -20,7 +25,7 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 2,
+      touchMultiplier: 1.5,
       infinite: false,
     });
 

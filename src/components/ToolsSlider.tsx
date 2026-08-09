@@ -74,7 +74,7 @@ export default function ToolsSlider() {
                 width={28}
                 height={28}
                 className={`object-contain dark:invert ${tool.isMonochrome ? "opacity-90" : ""}`}
-                unoptimized
+                unoptimized={typeof tool.logoSrc === "string" && tool.logoSrc.startsWith("http")}
               />
             </div>
 

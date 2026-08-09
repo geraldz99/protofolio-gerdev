@@ -172,8 +172,10 @@ export default function AllProjectsPage() {
                     src={project.image}
                     alt={project.title}
                     fill
+                    sizes="(max-width: 768px) 90vw, 500px"
+                    loading="lazy"
                     className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
-                    unoptimized
+                    unoptimized={typeof project.image === "string" && project.image.startsWith("http")}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-transparent to-transparent opacity-80" />
 

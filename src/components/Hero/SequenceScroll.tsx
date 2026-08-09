@@ -116,14 +116,13 @@ export default function SequenceScroll() {
             src={hero.heroImage || "/projects/ger2.png"}
             alt="Geraldine Firdaus Hero Showcase"
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 500px"
+            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 500px"
             className="object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.2)] group-hover:scale-[1.03] transition-transform duration-700"
             style={{
               maskImage: "linear-gradient(to bottom, black 82%, transparent 100%)",
               WebkitMaskImage: "linear-gradient(to bottom, black 82%, transparent 100%)",
             }}
             priority
-            unoptimized
           />
         </div>
 
